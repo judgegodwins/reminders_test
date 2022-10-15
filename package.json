@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "TS_NODE=true nodemon ./src/server.ts",
-    "migrate": "sequelize db:migrate"
+    "dev": "TS_NODE=true yarn migrate && nodemon ./src/server.ts",
+    "migrate": "sequelize db:migrate",
+    "build": "rimraf ./build && tsc",
+    "start": "yarn build && NODE_ENV=production yarn migrate && node build/server.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,7 @@
     "helmet": "^5.1.0",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
+    "reflect-metadata": "^0.1.13",
     "sequelize": "^6.21.1",
     "sequelize-auto-migrations": "github:scimonster/sequelize-auto-migrations#a063aa6535a3f580623581bf866cef2d609531ba",
     "sqlite3": "^5.1.2",
@@ -41,6 +44,7 @@
     "@types/stoppable": "^1.1.1",
     "@types/uuid": "^8.3.4",
     "nodemon": "^2.0.18",
+    "rimraf": "^3.0.2",
     "sequelize-cli": "^6.4.1",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.4"

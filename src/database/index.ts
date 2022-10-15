@@ -27,8 +27,9 @@ export const createConnection = async () => {
     config.db.username,
     config.db.password,
     {
-      host: config.db.host,
+      // host: config.db.host,
       dialect: "sqlite",
+      storage: path.resolve(__dirname, 'storage', 'db.sqlite')
     }
   );
 
@@ -64,7 +65,7 @@ export const createConnection = async () => {
 
   await sequelize.authenticate();
 
-  // if (config.env.isDevelopment) await sequelize.sync({ force: true });
+  // if (config.env.isDevelopment) await sequelize.sync();
 
   generalLogger.info("DB Connected");
 

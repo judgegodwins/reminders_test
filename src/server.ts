@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import http from "http";
 import stoppable from "stoppable";
 import { generalLogger, errorLogger } from "./core/Logger";

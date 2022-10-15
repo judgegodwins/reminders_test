@@ -8,6 +8,7 @@ import {
   BadRequestResponse,
   ForbiddenResponse,
   ValidationErrorResponse,
+  NotAllowedResponse,
 } from './ApiResponse';
 
 enum ErrorType {
@@ -22,7 +23,8 @@ enum ErrorType {
   NO_DATA = 'NoDataError',
   BAD_REQUEST = 'BadRequestError',
   FORBIDDEN = 'ForbiddenError',
-  VALIDATION_ERROR = 'ValidationError'
+  VALIDATION_ERROR = 'ValidationError',
+  NOT_ALLOWED = 'NotAllowedError'
 }
 
 export abstract class ApiError extends Error {
@@ -52,6 +54,8 @@ export abstract class ApiError extends Error {
         return new ForbiddenResponse(err.message).send(res);
       case ErrorType.EXTERNAL_API:
         return res.status((err as ExternalAPIError).code).send({ success: false, message: err.message });
+      case ErrorType.NOT_ALLOWED:
+        return new NotAllowedResponse(err.message).send(res);
       default: {
         let message = err.message;
         // Do not send failure message in production as it may send sensitive data
@@ -93,6 +97,12 @@ export class ValidationError extends ApiError {
 export class NotFoundError extends ApiError {
   constructor(message = 'Not Found') {
     super(ErrorType.NOT_FOUND, message);
+  }
+}
+
+export class NotALlowedError extends ApiError {
+  constructor(message = 'Method not Allowed') {
+    super(ErrorType.NOT_ALLOWED, message);
   }
 }
 

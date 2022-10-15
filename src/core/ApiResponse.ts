@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { PaginationResult } from '../utils';
+// import { PaginationResult } from '../utils';
 // import { PaginationResult } from '../helpers/Pagination';
 
 enum StatusCode {
@@ -11,12 +11,14 @@ enum StatusCode {
 
 enum ResponseStatus {
   SUCCESS = 200,
+  CREATED = 201,
   BAD_REQUEST = 400,
   VALIDATION_ERROR = 422,
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
   NOT_FOUND = 404,
   INTERNAL_ERROR = 500,
+  NOT_ALLOWED = 405,
 }
 
 abstract class ApiResponse {
@@ -71,16 +73,26 @@ export class SuccessResponse<T> extends ApiResponse {
   }
 }
 
-export class PaginationResponse<T> extends ApiResponse {
-  private data: PaginationResult<T>["data"];
-  private pageData: PaginationResult<T>["pageData"];
+export class CreatedResponse<T> extends ApiResponse {
+  constructor(message: string, private data: T) {
+    super(true, ResponseStatus.CREATED, message);
+  }
 
-  constructor(message: string, result: PaginationResult<T>) {
-    super(true, ResponseStatus.SUCCESS, message);
-    this.data = result.data;
-    this.pageData = result.pageData;
+  send(res: Response): Response {
+    return super.prepare<CreatedResponse<T>>(res, this);
   }
 }
+
+// export class PaginationResponse<T> extends ApiResponse {
+//   private data: PaginationResult<T>["data"];
+//   private pageData: PaginationResult<T>["pageData"];
+
+//   constructor(message: string, result: PaginationResult<T>) {
+//     super(true, ResponseStatus.SUCCESS, message);
+//     this.data = result.data;
+//     this.pageData = result.pageData;
+//   }
+// }
 
 export class NotFoundResponse extends ApiResponse {
   private url: string | undefined;
@@ -98,6 +110,12 @@ export class NotFoundResponse extends ApiResponse {
 export class AuthFailureResponse extends ApiResponse {
   constructor(message = 'Authentication Failure') {
     super(false, ResponseStatus.UNAUTHORIZED, message);
+  }
+}
+
+export class NotAllowedResponse extends ApiResponse {
+  constructor(message = 'Method not allowed') {
+    super(false, ResponseStatus.NOT_ALLOWED, message);
   }
 }
 

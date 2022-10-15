@@ -9,9 +9,9 @@ export default async () => {
   const dbConnection = await createConnection();
 
   const app = (await import("./app")).default;
-  // const router = (await import("./router")).default;
+  const router = (await import("./router")).default;
 
-  // app.use(router);
+  app.use(router);
   app.use(notFoundHandler);
   app.use(errorHandler);
 

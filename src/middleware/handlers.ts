@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ApiError, InternalError, NotFoundError } from "../core/ApiError";
+import { ApiError, InternalError, NotALlowedError, NotFoundError } from "../core/ApiError";
 import { errorLogger } from "../core/Logger";
 import config from "../config";
 
@@ -31,3 +31,10 @@ export const notFoundHandler = (
   res: Response,
   next: NextFunction
 ) => next(new NotFoundError());
+
+
+export const notAllowedHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => next(new NotALlowedError());
