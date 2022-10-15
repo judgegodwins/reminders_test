@@ -22,16 +22,11 @@ const initializeModel = async (
 };
 
 export const createConnection = async () => {
-  const sequelize = new Sequelize(
-    config.db.database,
-    config.db.username,
-    config.db.password,
-    {
-      // host: config.db.host,
-      dialect: "sqlite",
-      storage: path.resolve(__dirname, 'storage', 'db.sqlite')
-    }
-  );
+  const sequelize = new Sequelize({
+    // host: config.db.host,
+    dialect: "sqlite",
+    storage: path.resolve(__dirname, "storage", "db.sqlite"),
+  });
 
   const files = await fs.promises.readdir(modelsDir);
 
@@ -58,7 +53,7 @@ export const createConnection = async () => {
     if (Boolean(db.models[modelName].associate)) {
       db.models[modelName].associate(db.models);
     }
-  })
+  });
 
   db.sequelize = sequelize;
   db.Sequelize = Sequelize;
