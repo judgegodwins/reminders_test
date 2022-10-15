@@ -35,8 +35,6 @@ const config = {
   // },
 };
 
-console.log('config', config);
-
 export const validateConfig = () => {
   const missingKeys: string[] = [];
   Object.entries(config).forEach(([baseKey, baseValue]) => {
