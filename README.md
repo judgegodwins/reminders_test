@@ -1,4 +1,4 @@
-# twitter_mini_server
+# reminders test
 
 To run this app, run one of the following
 - `yarn dev` to start the app in development mode. This command also runs all pending DB migrations
