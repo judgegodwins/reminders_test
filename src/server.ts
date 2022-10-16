@@ -13,7 +13,7 @@ global.server = {
 const startServer = async () => {
   global.server.isStartingUp = true;
 
-  const { app, dbConnection } = await initialize();
+  const { app, dbConnection: { sequelize: dbConnection } } = await initialize();
   const server = stoppable(http.createServer(app));
 
   server.listen(config.app.port, () => {
@@ -29,14 +29,12 @@ const startServer = async () => {
     generalLogger.info("Starting graceful server shutdown");
 
     server.stop(async () => {
-      // await dbConnection
-      //   .close()
-      //   .then(() =>
-      //     generalLogger.info(
-      //       "Mongoose default connection disconnected through app termination"
-      //     )
-      //   )
-      //   .catch(generalLogger.error);
+      await dbConnection
+        .close()
+        .then(() =>
+          generalLogger.info('Database disconnected')
+        )
+        .catch(generalLogger.error);
 
       // await redisConnection
       //   .quit()
